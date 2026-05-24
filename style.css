@@ -63,6 +63,7 @@ nav {
 .card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,.08); border-color: #bbb; }
 .card-thumb { width: 100%; aspect-ratio: 16/9; background: #111; overflow: hidden; }
 .card-thumb--empty { background: #1a1a1a; }
+.card-thumb--contain { background: var(--bg); }
 .card-thumb--contain img { object-fit: contain; width: 100%; height: 100%; }
 .card-thumb video { width: 100%; height: 100%; object-fit: cover; }
 .card-body { padding: 28px 28px 32px; border-top: 1px solid var(--border); }
@@ -107,8 +108,9 @@ nav {
 
 /* ギャラリー */
 .gallery-section { padding: 72px 60px; }
-.gallery-grid { margin-top: 32px; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 2px; }
-.gallery-grid img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; }
+.gallery-grid { margin-top: 32px; columns: 3 280px; column-gap: 4px; }
+.gallery-grid img { width: 100%; height: auto; display: block; margin-bottom: 4px; break-inside: avoid; }
+@media (max-width: 640px) { .gallery-grid { columns: 2; } }
 
 /* MABU コンセプト（ヒーロー右列） */
 .mabu-concept-hero { align-self: start; padding-top: 8px; }

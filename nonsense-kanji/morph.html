@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kanji Morphing — Nonsense Kanji</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<nav>
+  <span class="nav-logo">Ando Takahiro</span>
+  <a class="nav-back" href="index.html">← Nonsense Kanji</a>
+</nav>
+
+<section class="page-hero">
+  <div>
+    <div class="page-num">01 — Generation</div>
+    <h1 class="page-title">Kanji<br>Morphing</h1>
+    <div class="page-en">漢字モーフィング</div>
+  </div>
+  <p class="page-desc-short">A flow-matching diffusion model interpolates between kanji forms, transforming shape continuously without regard for meaning.</p>
+</section>
+
+<section class="video-section">
+  <div class="section-label">Demo Video</div>
+  <div class="video-wrap">
+    <video autoplay muted loop playsinline controls>
+      <source src="../assets/videos/nonsense-kanji/nk_morph001.mp4" type="video/mp4">
+    </video>
+  </div>
+</section>
+
+<section class="desc-section">
+  <div class="desc-label">Description</div>
+  <div class="desc-body">
+    <p>Input text is decomposed into individual kanji characters. Adjacent pairs are morphed using a flow-matching diffusion model and played as a continuous loop.</p>
+    <p>Noise is intentionally injected at segment midpoints, making visible the process by which the model extracts kanji forms from chaos. At 2 steps, forms are turbulent and ambiguous; at 160 steps, sharp black-and-white characters emerge.</p>
+    <p>In the three-screen projection installation, sequential symbol flows are projected onto left, center, and right walls — immersing the viewer in a field of transforming signs.</p>
+  </div>
+</section>
+
+<section class="tech-section">
+  <div class="section-label">Technical Notes</div>
+  <div class="tech-list">
+    <div class="tech-item">Flow Matching Diffusion</div>
+    <div class="tech-item">SymbolUNet (64×64)</div>
+    <div class="tech-item">2–160 Step Progressive Quality</div>
+    <div class="tech-item">3-Screen Projection</div>
+    <div class="tech-item">PyTorch / Apple MPS</div>
+    <div class="tech-item">Progressive Rendering</div>
+  </div>
+</section>
+
+<section class="gallery-section">
+  <div class="section-label">Images</div>
+  <div class="gallery-grid" id="gallery">
+    <!-- images go here -->
+  </div>
+</section>
+
+<footer>
+  <span>Ando Takahiro</span>
+</footer>
+</body>
+</html>

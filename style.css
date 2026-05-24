@@ -110,6 +110,30 @@ nav {
 .gallery-grid { margin-top: 32px; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 2px; }
 .gallery-grid img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; }
 
+/* MABU コンセプト */
+.mabu-concept { padding: 72px 60px; }
+.mabu-block { max-width: 720px; }
+.mabu-heading {
+  font-size: clamp(32px, 5vw, 56px);
+  font-weight: 700;
+  color: #c00;
+  letter-spacing: .05em;
+  line-height: 1.2;
+  margin-bottom: 28px;
+}
+.mabu-line {
+  font-size: 14px;
+  line-height: 2;
+  color: var(--fg);
+  border-bottom: 1px solid var(--fg);
+  padding-bottom: 2px;
+  margin-bottom: 4px;
+  display: inline-block;
+  width: 100%;
+}
+.mabu-spacer { height: 20px; }
+.mabu-divider { border-top: 1px solid var(--border); margin: 56px 0; max-width: 720px; }
+
 /* フッター */
 footer {
   border-top: 1px solid var(--border); padding: 32px 40px;

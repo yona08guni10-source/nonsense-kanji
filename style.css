@@ -128,6 +128,20 @@ nav {
   font-size: 13px;
   line-height: 2;
   color: var(--fg);
+  margin-bottom: 24px;
+}
+.mabu-concept-list {
+  font-family: 'Hiragino Mincho ProN', 'Yu Mincho', 'YuMincho', 'Noto Serif JP', serif;
+  font-size: 13px;
+  line-height: 1.9;
+  color: var(--fg);
+}
+.mabu-concept-close {
+  font-family: 'Hiragino Mincho ProN', 'Yu Mincho', 'YuMincho', 'Noto Serif JP', serif;
+  font-size: 13px;
+  line-height: 2;
+  color: var(--fg);
+  margin-top: 24px;
 }
 .mabu-mincho {
   font-family: 'Hiragino Mincho ProN', 'Yu Mincho', 'YuMincho', 'Noto Serif JP', serif;

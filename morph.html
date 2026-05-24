@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>漢字モーフィング — Nonsense Kanji</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav>
+  <span class="nav-logo">Nonsense Kanji</span>
+  <a class="nav-back" href="index.html">← 一覧に戻る</a>
+</nav>
+
+<section class="page-hero">
+  <div>
+    <div class="page-num">01 — Generation</div>
+    <h1 class="page-title">漢字<br>モーフィング</h1>
+    <div class="page-en">Kanji Morphing</div>
+  </div>
+  <p class="page-desc-short">漢字と漢字の間を拡散モデルが補間しながら変形し続けるインスタレーション。記号の意味は問われない。ただ形が変わり続ける。</p>
+</section>
+
+<section class="video-section">
+  <div class="section-label">Demo Video</div>
+  <div class="video-wrap">
+    <video autoplay muted loop playsinline controls>
+      <source src="assets/videos/kanji_morph_samune.mp4" type="video/mp4">
+    </video>
+  </div>
+</section>
+
+<section class="desc-section">
+  <div class="desc-label">Description</div>
+  <div class="desc-body">
+    <p>テキストを入力すると、漢字ごとに分解して隣接ペアをフロー・マッチング拡散モデルでモーフィングし、連鎖ループとして再生します。</p>
+    <p>セグメント中間部では意図的にノイズを注入し、モデルがそこから漢字の形を引き出す過程を可視化します。2ステップでは混沌とした形が、160ステップでは鮮明な白黒の漢字が現れ、品質が段階的に向上していきます。</p>
+    <p>3面プロジェクターによる展示では左・中央・右の壁に時系列で連続する記号の流れを投影し、観客が記号の変容の中に没入する空間を作ります。</p>
+  </div>
+</section>
+
+<section class="tech-section">
+  <div class="section-label">Technical Notes</div>
+  <div class="tech-list">
+    <div class="tech-item">Flow Matching Diffusion</div>
+    <div class="tech-item">SymbolUNet (64×64)</div>
+    <div class="tech-item">2〜160ステップ品質段階</div>
+    <div class="tech-item">3面プロジェクター展示</div>
+    <div class="tech-item">PyTorch / Apple MPS</div>
+    <div class="tech-item">Progressive Rendering</div>
+  </div>
+</section>
+
+<section class="gallery-section">
+  <div class="section-label">Images</div>
+  <div class="gallery-grid" id="gallery">
+    <!-- assets/images/ にファイルを置くとここに追加 -->
+  </div>
+</section>
+
+<footer>
+  <span>Nonsense Kanji</span>
+  <span>安藤 昂宏 / Takahiro Ando</span>
+</footer>
+</body>
+</html>

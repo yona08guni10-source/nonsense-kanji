@@ -9,6 +9,10 @@
 .cp-hero { padding: 60px 40px 56px; border-bottom: 1px solid var(--border); text-align: center; }
 .cp-title { font-size: clamp(36px, 6vw, 72px); font-weight: 200; letter-spacing: .1em; line-height: 1.1; margin-bottom: 16px; }
 .cp-subtitle { font-size: 13px; letter-spacing: .2em; color: var(--muted); }
+.cp-desc { padding: 64px 40px; border-bottom: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; }
+.cp-desc .section-label { margin-bottom: 32px; }
+.cp-desc-body { max-width: 640px; font-size: 13px; line-height: 2.4; color: #444; text-align: center; }
+.cp-desc-body p + p { margin-top: 1.4em; }
 .cp-grid { padding: 64px 40px 80px; }
 .cp-grid .grid-label { text-align: center; margin-bottom: 40px; }
 .cp-grid .grid { max-width: 1100px; margin: 0 auto; }
@@ -23,6 +27,15 @@
 <section class="cp-hero">
   <h1 class="cp-title">Nonsense Kanji</h1>
   <p class="cp-subtitle">- Generative Art -</p>
+</section>
+
+<section class="cp-desc">
+  <div class="section-label">概要</div>
+  <div class="cp-desc-body">
+    <p>個人の絵や図形だったものが象徴として使用される漢字を画像として解釈し、AIに学習させた。</p>
+    <p>そこから繰り出される画像に対して私はどのような印象を抱くのか手を動かしながら考える。</p>
+    <p>現在は画像と主体の関係性と、AI生成のメディア的な特性を考えつつ、漢字の主体はどこに帰属するのか。AIで漢字を生成するときその裏側では一体何が起こっているのか。を鑑賞者に感覚的に感じてもらう表現や展示を模索している。</p>
+  </div>
 </section>
 
 <section class="cp-grid">

@@ -77,6 +77,199 @@
   </div>
 </section>
 
+<section class="cp-desc" style="border-bottom: 1px solid var(--border);">
+  <div class="section-label">生成の仕組み</div>
+  <div class="cp-desc-body">
+    <p>このグリッドは、学習済みの SymbolUNet にガウスノイズだけを与えて生成したものだ。入力テキストも漢字の指定もない。純粋なランダムノイズが、モデルの速度場に従って積分されると、漢字らしい形が浮かび上がってくる。</p>
+    <p>モデルは Apple Silicon の GPU（MPS バックエンド）上でローカル実行している。クラウド不要、すべてが手元の Mac で完結する。下の図はその構成だ。</p>
+  </div>
+</section>
+
+<section class="cp-tech" style="border-bottom: 1px solid var(--border);">
+  <div class="section-label">パイプライン図解</div>
+  <div style="max-width:900px; width:100%;">
+
+    <!-- 学習フェーズ -->
+    <div style="font-size:10px; letter-spacing:.15em; color:#aaa; margin-bottom:20px; text-align:center;">TRAINING</div>
+    <svg viewBox="0 0 820 130" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;margin-bottom:48px;">
+      <defs>
+        <marker id="arr" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L6,3 Z" fill="#ccc"/>
+        </marker>
+      </defs>
+
+      <!-- Noto Font -->
+      <rect x="0" y="30" width="120" height="60" rx="3" fill="#f8f8f8" stroke="#ddd"/>
+      <text x="60" y="52" text-anchor="middle" font-size="8" fill="#aaa" font-family="sans-serif">Google</text>
+      <text x="60" y="64" text-anchor="middle" font-size="9" fill="#555" font-family="sans-serif">Noto Font</text>
+      <text x="60" y="76" text-anchor="middle" font-size="8" fill="#aaa" font-family="sans-serif">漢字グリフ</text>
+      <!-- 小さなグリフサンプル -->
+      <text x="18" y="108" text-anchor="middle" font-size="11" fill="#ccc" font-family="serif">漢</text>
+      <text x="40" y="108" text-anchor="middle" font-size="11" fill="#ccc" font-family="serif">字</text>
+      <text x="62" y="108" text-anchor="middle" font-size="11" fill="#ccc" font-family="serif">記</text>
+      <text x="84" y="108" text-anchor="middle" font-size="11" fill="#ccc" font-family="serif">号</text>
+      <text x="106" y="108" text-anchor="middle" font-size="11" fill="#ccc" font-family="serif">…</text>
+
+      <!-- 矢印1 -->
+      <line x1="124" y1="60" x2="158" y2="60" stroke="#ddd" stroke-width="1" marker-end="url(#arr)"/>
+      <text x="141" y="54" text-anchor="middle" font-size="7" fill="#ccc" font-family="sans-serif">render</text>
+      <text x="141" y="74" text-anchor="middle" font-size="7" fill="#ccc" font-family="sans-serif">64×64 px</text>
+
+      <!-- PNG dataset -->
+      <rect x="162" y="30" width="100" height="60" rx="3" fill="#f8f8f8" stroke="#ddd"/>
+      <text x="212" y="52" text-anchor="middle" font-size="8" fill="#aaa" font-family="sans-serif">PNG dataset</text>
+      <!-- 小さいグリッド表現 -->
+      <rect x="178" y="60" width="14" height="14" rx="1" fill="#eee" stroke="#ddd"/>
+      <rect x="196" y="60" width="14" height="14" rx="1" fill="#eee" stroke="#ddd"/>
+      <rect x="214" y="60" width="14" height="14" rx="1" fill="#eee" stroke="#ddd"/>
+      <rect x="232" y="60" width="14" height="14" rx="1" fill="#eee" stroke="#ddd"/>
+      <text x="185" y="71" text-anchor="middle" font-size="9" fill="#bbb" font-family="serif">漢</text>
+      <text x="203" y="71" text-anchor="middle" font-size="9" fill="#bbb" font-family="serif">字</text>
+      <text x="221" y="71" text-anchor="middle" font-size="9" fill="#bbb" font-family="serif">記</text>
+      <text x="239" y="71" text-anchor="middle" font-size="9" fill="#bbb" font-family="serif">号</text>
+      <text x="212" y="98" text-anchor="middle" font-size="7" fill="#ccc" font-family="sans-serif">グレースケール [-1,1]</text>
+
+      <!-- 矢印2 -->
+      <line x1="266" y1="60" x2="300" y2="60" stroke="#ddd" stroke-width="1" marker-end="url(#arr)"/>
+      <text x="283" y="54" text-anchor="middle" font-size="7" fill="#ccc" font-family="sans-serif">Flow</text>
+      <text x="283" y="74" text-anchor="middle" font-size="7" fill="#ccc" font-family="sans-serif">Matching</text>
+
+      <!-- SymbolUNet box -->
+      <rect x="304" y="14" width="200" height="92" rx="3" fill="#111" stroke="#111"/>
+      <text x="404" y="34" text-anchor="middle" font-size="9" fill="#fff" font-family="sans-serif" letter-spacing="2">SymbolUNet</text>
+      <!-- 内部フロー -->
+      <rect x="316" y="42" width="52" height="18" rx="2" fill="#2a2a2a" stroke="#444"/>
+      <text x="342" y="55" text-anchor="middle" font-size="7" fill="#888" font-family="sans-serif">Encoder</text>
+      <line x1="370" y1="51" x2="384" y2="51" stroke="#444" stroke-width="1" marker-end="url(#arr)"/>
+      <rect x="386" y="42" width="40" height="18" rx="2" fill="#333" stroke="#555"/>
+      <text x="406" y="55" text-anchor="middle" font-size="7" fill="#aaa" font-family="sans-serif">Bottleneck</text>
+      <line x1="428" y1="51" x2="442" y2="51" stroke="#444" stroke-width="1" marker-end="url(#arr)"/>
+      <rect x="444" y="42" width="52" height="18" rx="2" fill="#2a2a2a" stroke="#444"/>
+      <text x="470" y="55" text-anchor="middle" font-size="7" fill="#888" font-family="sans-serif">Decoder</text>
+      <!-- skip connection -->
+      <path d="M368 42 Q368 30 406 30 Q444 30 444 42" stroke="#333" stroke-width="1" fill="none" stroke-dasharray="3,2"/>
+      <!-- 時刻埋め込み -->
+      <rect x="362" y="70" width="84" height="18" rx="2" fill="#1a1a1a" stroke="#333"/>
+      <text x="404" y="83" text-anchor="middle" font-size="7" fill="#666" font-family="sans-serif">sinusoidal t embedding</text>
+      <!-- 損失 -->
+      <text x="404" y="100" text-anchor="middle" font-size="7.5" fill="#555" font-family="sans-serif">loss = ‖v_θ(z_t,t) − (x−ε)‖²</text>
+
+      <!-- 矢印3 -->
+      <line x1="508" y1="60" x2="542" y2="60" stroke="#ddd" stroke-width="1" marker-end="url(#arr)"/>
+      <text x="525" y="54" text-anchor="middle" font-size="7" fill="#ccc" font-family="sans-serif">Apple</text>
+      <text x="525" y="74" text-anchor="middle" font-size="7" fill="#ccc" font-family="sans-serif">MPS GPU</text>
+
+      <!-- 学習済みモデル -->
+      <rect x="546" y="30" width="110" height="60" rx="3" fill="#fff" stroke="#111" stroke-width="1.5"/>
+      <text x="601" y="52" text-anchor="middle" font-size="8" fill="#999" font-family="sans-serif">trained</text>
+      <text x="601" y="64" text-anchor="middle" font-size="10" fill="#111" font-family="sans-serif">model_epoch</text>
+      <text x="601" y="76" text-anchor="middle" font-size="10" fill="#111" font-family="sans-serif">1000.pt</text>
+
+      <!-- 矢印4 -->
+      <line x1="660" y1="60" x2="694" y2="60" stroke="#ddd" stroke-width="1" marker-end="url(#arr)"/>
+
+      <!-- パラメータ情報 -->
+      <rect x="698" y="30" width="122" height="60" rx="3" fill="#f8f8f8" stroke="#ddd"/>
+      <text x="759" y="48" text-anchor="middle" font-size="8" fill="#aaa" font-family="sans-serif">64×64 · base_ch=48</text>
+      <text x="759" y="62" text-anchor="middle" font-size="8" fill="#888" font-family="sans-serif">epochs 1000</text>
+      <text x="759" y="76" text-anchor="middle" font-size="8" fill="#aaa" font-family="sans-serif">loss = 0.107</text>
+    </svg>
+
+    <!-- 推論フェーズ -->
+    <div style="font-size:10px; letter-spacing:.15em; color:#aaa; margin-bottom:20px; text-align:center;">INFERENCE</div>
+    <svg viewBox="0 0 820 140" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;">
+      <defs>
+        <marker id="arr2" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L6,3 Z" fill="#ccc"/>
+        </marker>
+      </defs>
+
+      <!-- Gaussian Noise -->
+      <rect x="0" y="30" width="110" height="70" rx="3" fill="#f5f5f5" stroke="#e8e8e8"/>
+      <text x="55" y="48" text-anchor="middle" font-size="8" fill="#bbb" font-family="sans-serif">Gaussian Noise</text>
+      <!-- ノイズ点 -->
+      <circle cx="22" cy="66" r="1.5" fill="#ddd"/>
+      <circle cx="38" cy="58" r="1.5" fill="#ccc"/>
+      <circle cx="54" cy="72" r="1.5" fill="#ddd"/>
+      <circle cx="70" cy="60" r="1.5" fill="#ccc"/>
+      <circle cx="86" cy="68" r="1.5" fill="#ddd"/>
+      <circle cx="30" cy="80" r="1.5" fill="#ccc"/>
+      <circle cx="46" cy="76" r="1.5" fill="#ddd"/>
+      <circle cx="62" cy="84" r="1.5" fill="#ccc"/>
+      <circle cx="78" cy="76" r="1.5" fill="#ddd"/>
+      <text x="55" y="96" text-anchor="middle" font-size="7" fill="#ccc" font-family="sans-serif">z ~ N(0,I)</text>
+
+      <!-- 矢印 -->
+      <line x1="114" y1="65" x2="148" y2="65" stroke="#ddd" stroke-width="1" marker-end="url(#arr2)"/>
+      <text x="131" y="59" text-anchor="middle" font-size="7" fill="#ccc" font-family="sans-serif">ODE</text>
+      <text x="131" y="79" text-anchor="middle" font-size="7" fill="#ccc" font-family="sans-serif">n_steps=80</text>
+
+      <!-- ODE 積分ステップ群 -->
+      <rect x="152" y="20" width="30" height="40" rx="2" fill="#f0f0f0" stroke="#e0e0e0"/>
+      <text x="167" y="44" text-anchor="middle" font-size="14" fill="#e0e0e0" font-family="serif">？</text>
+      <text x="167" y="70" text-anchor="middle" font-size="7" fill="#ccc" font-family="sans-serif">t=0.1</text>
+
+      <rect x="192" y="16" width="30" height="44" rx="2" fill="#e4e4e4" stroke="#ccc"/>
+      <text x="207" y="42" text-anchor="middle" font-size="16" fill="#ccc" font-family="serif">？</text>
+      <text x="207" y="70" text-anchor="middle" font-size="7" fill="#ccc" font-family="sans-serif">t=0.4</text>
+
+      <rect x="234" y="12" width="30" height="50" rx="2" fill="#d8d8d8" stroke="#bbb"/>
+      <text x="249" y="40" text-anchor="middle" font-size="18" fill="#aaa" font-family="serif">字</text>
+      <text x="249" y="72" text-anchor="middle" font-size="7" fill="#ccc" font-family="sans-serif">t=0.7</text>
+
+      <rect x="276" y="6" width="40" height="60" rx="2" fill="#fff" stroke="#111" stroke-width="1.5"/>
+      <text x="296" y="42" text-anchor="middle" font-size="24" fill="#111" font-family="serif">字</text>
+      <text x="296" y="78" text-anchor="middle" font-size="7" fill="#aaa" font-family="sans-serif">t=1.0</text>
+
+      <!-- v_θ ラベル -->
+      <text x="225" y="104" text-anchor="middle" font-size="8" fill="#bbb" font-family="sans-serif">z_{t+dt} = z_t + v_θ(z_t, t) · dt</text>
+
+      <!-- 矢印 -->
+      <line x1="322" y1="65" x2="356" y2="65" stroke="#ddd" stroke-width="1" marker-end="url(#arr2)"/>
+
+      <!-- モーフィングの分岐説明 -->
+      <rect x="360" y="10" width="200" height="115" rx="3" fill="#fafafa" stroke="#e8e8e8"/>
+      <text x="460" y="28" text-anchor="middle" font-size="8.5" fill="#888" font-family="sans-serif">morphing: A → noise → B</text>
+      <line x1="370" y1="34" x2="550" y2="34" stroke="#eee" stroke-width="1"/>
+      <!-- 漢字A -->
+      <rect x="372" y="42" width="36" height="36" rx="2" fill="#fff" stroke="#ccc"/>
+      <text x="390" y="66" text-anchor="middle" font-size="22" fill="#888" font-family="serif">目</text>
+      <text x="390" y="88" text-anchor="middle" font-size="7" fill="#bbb" font-family="sans-serif">漢字 A</text>
+      <!-- 矢印 -->
+      <line x1="410" y1="60" x2="424" y2="60" stroke="#ddd" stroke-width="1" marker-end="url(#arr2)"/>
+      <!-- noise injection -->
+      <rect x="426" y="42" width="48" height="36" rx="2" fill="#f0f0f0" stroke="#ddd"/>
+      <text x="450" y="58" text-anchor="middle" font-size="7" fill="#bbb" font-family="sans-serif">noise</text>
+      <text x="450" y="68" text-anchor="middle" font-size="7" fill="#bbb" font-family="sans-serif">injection</text>
+      <text x="450" y="88" text-anchor="middle" font-size="7" fill="#ccc" font-family="sans-serif">中点 α=0.5</text>
+      <!-- 矢印 -->
+      <line x1="476" y1="60" x2="490" y2="60" stroke="#ddd" stroke-width="1" marker-end="url(#arr2)"/>
+      <!-- 漢字B -->
+      <rect x="492" y="42" width="36" height="36" rx="2" fill="#fff" stroke="#ccc"/>
+      <text x="510" y="66" text-anchor="middle" font-size="22" fill="#888" font-family="serif">次</text>
+      <text x="510" y="88" text-anchor="middle" font-size="7" fill="#bbb" font-family="sans-serif">漢字 B</text>
+
+      <!-- 矢印 -->
+      <line x1="564" y1="65" x2="598" y2="65" stroke="#ddd" stroke-width="1" marker-end="url(#arr2)"/>
+
+      <!-- 出力: 動画フレーム -->
+      <rect x="602" y="20" width="114" height="90" rx="3" fill="#111" stroke="#111"/>
+      <text x="659" y="40" text-anchor="middle" font-size="8" fill="#fff" font-family="sans-serif">video frames</text>
+      <!-- フレームサムネイル -->
+      <rect x="612" y="48" width="22" height="22" rx="1" fill="#333"/>
+      <text x="623" y="63" text-anchor="middle" font-size="12" fill="#888" font-family="serif">目</text>
+      <rect x="638" y="48" width="22" height="22" rx="1" fill="#2a2a2a"/>
+      <text x="649" y="63" text-anchor="middle" font-size="12" fill="#555" font-family="serif">？</text>
+      <rect x="664" y="48" width="22" height="22" rx="1" fill="#333"/>
+      <text x="675" y="63" text-anchor="middle" font-size="12" fill="#888" font-family="serif">？</text>
+      <rect x="690" y="48" width="22" height="22" rx="1" fill="#2a2a2a"/>
+      <text x="701" y="63" text-anchor="middle" font-size="12" fill="#555" font-family="serif">次</text>
+      <text x="659" y="98" text-anchor="middle" font-size="7" fill="#555" font-family="sans-serif">Apple MPS · port 7863</text>
+    </svg>
+
+  </div>
+</section>
+
 <section class="cp-tech">
   <div class="section-label">技術解説</div>
   <div class="cp-tech-grid">

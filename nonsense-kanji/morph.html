@@ -16,10 +16,18 @@
 .cp-desc .section-label { margin-bottom: 32px; }
 .cp-desc-body { max-width: 640px; font-size: 13px; line-height: 2.4; color: #444; text-align: center; }
 .cp-desc-body p + p { margin-top: 1.4em; }
-.cp-tech { padding: 48px 40px; border-bottom: 1px solid var(--border); background: var(--white); display: flex; flex-direction: column; align-items: center; }
-.cp-tech .section-label { margin-bottom: 24px; }
-.cp-tech-list { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; max-width: 720px; }
-.cp-tech-list .tech-item { font-size: 10px; letter-spacing: .2em; color: var(--muted); padding: 10px 16px; border: 1px solid var(--border); }
+.cp-tech { padding: 64px 40px; border-bottom: 1px solid var(--border); background: var(--white); display: flex; flex-direction: column; align-items: center; }
+.cp-tech .section-label { margin-bottom: 40px; }
+.cp-tech-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; max-width: 960px; width: 100%; border: 1px solid var(--border); }
+@media (max-width: 860px) { .cp-tech-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 520px) { .cp-tech-grid { grid-template-columns: 1fr; } }
+.tech-card { padding: 24px 20px; background: #fff; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.tech-card:nth-child(3n) { border-right: none; }
+@media (max-width: 860px) { .tech-card:nth-child(3n) { border-right: 1px solid var(--border); } .tech-card:nth-child(2n) { border-right: none; } }
+.tech-diagram { width: 100%; margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+.tech-diagram svg { width: 100%; height: auto; display: block; }
+.tech-card-title { font-size: 10px; letter-spacing: .15em; margin-bottom: 10px; color: #111; }
+.tech-card-desc { font-size: 11px; line-height: 1.9; color: #999; }
 .cp-gallery { padding: 64px 40px 80px; display: flex; flex-direction: column; align-items: center; }
 .cp-gallery .section-label { margin-bottom: 32px; }
 .cp-gallery .gallery-grid { width: 100%; max-width: 960px; }
@@ -28,7 +36,7 @@
 <body class="has-nav">
 <nav>
   <span class="nav-logo">Ando Takahiro</span>
-  <a class="nav-back" href="index.html">← Nonsense Kanji</a>
+  <a class="nav-back" href="index.html">← Nonsense Kanji に戻る</a>
 </nav>
 
 <section class="cp-hero">
@@ -37,7 +45,7 @@
 </section>
 
 <section class="cp-video">
-  <div class="section-label">Demo Video</div>
+  <div class="section-label">デモ動画</div>
   <div class="video-wrap">
     <video autoplay muted loop playsinline controls>
       <source src="../assets/videos/nonsense-kanji/nk_morph001.mp4" type="video/mp4">
@@ -46,28 +54,200 @@
 </section>
 
 <section class="cp-desc">
-  <div class="section-label">Description</div>
+  <div class="section-label">概要</div>
   <div class="cp-desc-body">
-    <p>Input text is decomposed into individual kanji characters. Adjacent pairs are morphed using a flow-matching diffusion model and played as a continuous loop.</p>
-    <p>Noise is intentionally injected at segment midpoints, making visible the process by which the model extracts kanji forms from chaos. At 2 steps, forms are turbulent and ambiguous; at 160 steps, sharp black-and-white characters emerge.</p>
-    <p>In the three-screen projection installation, sequential symbol flows are projected onto left, center, and right walls — immersing the viewer in a field of transforming signs.</p>
+    <p>入力テキストを一文字ずつ分解し、隣接する漢字ペアをフローマッチング拡散モデルで補間、連続ループとして再生する。</p>
+    <p>各セグメントの中点にはあえてノイズを注入し、モデルが混沌から漢字形状を抽出する過程を可視化する。2 ステップでは形が荒く曖昧に、160 ステップでは鮮明な白黒の文字が浮かび上がる。</p>
+    <p>3 スクリーン投影インスタレーションでは、左・中央・右の壁面に記号の流れを同時投影し、変容する記号の場の中に観者を包み込む。</p>
   </div>
 </section>
 
 <section class="cp-tech">
-  <div class="section-label">Technical Notes</div>
-  <div class="cp-tech-list">
-    <div class="tech-item">Flow Matching Diffusion</div>
-    <div class="tech-item">SymbolUNet (64×64)</div>
-    <div class="tech-item">2–160 Step Progressive Quality</div>
-    <div class="tech-item">3-Screen Projection</div>
-    <div class="tech-item">PyTorch / Apple MPS</div>
-    <div class="tech-item">Progressive Rendering</div>
+  <div class="section-label">技術解説</div>
+  <div class="cp-tech-grid">
+
+    <!-- 1. Flow Matching Diffusion -->
+    <div class="tech-card">
+      <div class="tech-diagram">
+        <svg viewBox="0 0 210 68" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs><marker id="a1" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L6,3 Z" fill="#ccc"/></marker></defs>
+          <!-- ノイズボックス -->
+          <rect x="4" y="4" width="42" height="42" rx="2" fill="#f4f4f4" stroke="#ddd"/>
+          <circle cx="14" cy="14" r="1.5" fill="#ccc"/><circle cx="24" cy="10" r="1.5" fill="#bbb"/>
+          <circle cx="34" cy="17" r="1.5" fill="#ccc"/><circle cx="18" cy="26" r="1.5" fill="#bbb"/>
+          <circle cx="38" cy="24" r="1.5" fill="#ccc"/><circle cx="28" cy="34" r="1.5" fill="#bbb"/>
+          <circle cx="12" cy="38" r="1.5" fill="#ccc"/><circle cx="40" cy="38" r="1.5" fill="#bbb"/>
+          <text x="25" y="57" text-anchor="middle" font-size="8" fill="#bbb" font-family="sans-serif">ノイズ</text>
+          <!-- 矢印1 -->
+          <line x1="48" y1="25" x2="72" y2="25" stroke="#ccc" stroke-width="1.2" marker-end="url(#a1)"/>
+          <text x="60" y="20" text-anchor="middle" font-size="7" fill="#ccc" font-family="sans-serif">v_θ(z,t)</text>
+          <!-- 中間ボックス -->
+          <rect x="76" y="4" width="42" height="42" rx="2" fill="#f9f9f9" stroke="#e0e0e0"/>
+          <text x="97" y="30" text-anchor="middle" font-size="22" fill="#ddd" font-family="serif">漢</text>
+          <text x="97" y="57" text-anchor="middle" font-size="8" fill="#bbb" font-family="sans-serif">t = 0.5</text>
+          <!-- 矢印2 -->
+          <line x1="120" y1="25" x2="144" y2="25" stroke="#ccc" stroke-width="1.2" marker-end="url(#a1)"/>
+          <!-- 漢字ボックス -->
+          <rect x="148" y="4" width="58" height="42" rx="2" fill="#fff" stroke="#111" stroke-width="1.5"/>
+          <text x="177" y="32" text-anchor="middle" font-size="26" fill="#111" font-family="serif">漢</text>
+          <text x="177" y="57" text-anchor="middle" font-size="8" fill="#bbb" font-family="sans-serif">漢字</text>
+        </svg>
+      </div>
+      <div class="tech-card-title">フローマッチング拡散</div>
+      <div class="tech-card-desc">速度場 v_θ(z,t) を学習し、ガウスノイズから漢字形状への連続変換を実現。ODE 積分で任意の中間状態を補間できる。</div>
+    </div>
+
+    <!-- 2. SymbolUNet -->
+    <div class="tech-card">
+      <div class="tech-diagram">
+        <svg viewBox="0 0 210 82" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <text x="32" y="9" text-anchor="middle" font-size="7" fill="#aaa" font-family="sans-serif">入力 64×64</text>
+          <!-- エンコーダ -->
+          <rect x="6" y="13" width="52" height="13" rx="2" fill="#ebebeb" stroke="#ccc"/>
+          <text x="32" y="23" text-anchor="middle" font-size="6.5" fill="#888" font-family="sans-serif">Conv × 2</text>
+          <line x1="32" y1="27" x2="32" y2="33" stroke="#ccc" stroke-width="1"/>
+          <polygon points="28,33 32,38 36,33" fill="#ddd"/>
+          <rect x="16" y="40" width="32" height="11" rx="2" fill="#ddd" stroke="#bbb"/>
+          <text x="32" y="49" text-anchor="middle" font-size="6.5" fill="#888" font-family="sans-serif">Conv × 2</text>
+          <line x1="32" y1="52" x2="32" y2="58" stroke="#ccc" stroke-width="1"/>
+          <polygon points="28,58 32,62 36,58" fill="#ddd"/>
+          <!-- ボトルネック -->
+          <rect x="80" y="64" width="50" height="12" rx="2" fill="#111" stroke="#111"/>
+          <text x="105" y="73" text-anchor="middle" font-size="6.5" fill="#fff" font-family="sans-serif">Bottleneck</text>
+          <!-- スキップ接続 -->
+          <line x1="58" y1="19.5" x2="152" y2="19.5" stroke="#e8e8e8" stroke-width="1" stroke-dasharray="3,2"/>
+          <line x1="48" y1="45.5" x2="162" y2="45.5" stroke="#e8e8e8" stroke-width="1" stroke-dasharray="3,2"/>
+          <!-- BNへの接続 -->
+          <path d="M32 62 C32 70 55 70 80 70" stroke="#ccc" stroke-width="1" fill="none"/>
+          <path d="M130 70 C155 70 178 70 178 62" stroke="#ccc" stroke-width="1" fill="none"/>
+          <!-- デコーダ -->
+          <rect x="162" y="40" width="32" height="11" rx="2" fill="#ddd" stroke="#bbb"/>
+          <text x="178" y="49" text-anchor="middle" font-size="6.5" fill="#888" font-family="sans-serif">Up+Conv</text>
+          <line x1="178" y1="39" x2="178" y2="28" stroke="#ccc" stroke-width="1"/>
+          <polygon points="174,28 178,23 182,28" fill="#ddd"/>
+          <rect x="152" y="13" width="52" height="13" rx="2" fill="#ebebeb" stroke="#ccc"/>
+          <text x="178" y="23" text-anchor="middle" font-size="6.5" fill="#888" font-family="sans-serif">Up+Conv</text>
+          <text x="178" y="9" text-anchor="middle" font-size="7" fill="#aaa" font-family="sans-serif">出力 64×64</text>
+        </svg>
+      </div>
+      <div class="tech-card-title">SymbolUNet (64×64)</div>
+      <div class="tech-card-desc">エンコーダとデコーダをスキップ接続でつなぐ U 字型 CNN。64×64 の漢字画像ノイズ除去に特化した軽量設計。</div>
+    </div>
+
+    <!-- 3. 2-160 Step -->
+    <div class="tech-card">
+      <div class="tech-diagram">
+        <svg viewBox="0 0 210 68" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- 5段階のボックス -->
+          <rect x="4" y="6" width="30" height="36" rx="2" fill="#f5f5f5" stroke="#e8e8e8"/>
+          <text x="19" y="29" text-anchor="middle" font-size="18" fill="#e8e8e8" font-family="serif">漢</text>
+          <text x="19" y="52" text-anchor="middle" font-size="7.5" fill="#ccc" font-family="sans-serif">2</text>
+
+          <rect x="40" y="6" width="30" height="36" rx="2" fill="#f0f0f0" stroke="#d8d8d8"/>
+          <text x="55" y="29" text-anchor="middle" font-size="18" fill="#d0d0d0" font-family="serif">漢</text>
+          <text x="55" y="52" text-anchor="middle" font-size="7.5" fill="#ccc" font-family="sans-serif">20</text>
+
+          <rect x="76" y="6" width="30" height="36" rx="2" fill="#e8e8e8" stroke="#bbb"/>
+          <text x="91" y="29" text-anchor="middle" font-size="18" fill="#aaa" font-family="serif">漢</text>
+          <text x="91" y="52" text-anchor="middle" font-size="7.5" fill="#ccc" font-family="sans-serif">60</text>
+
+          <rect x="112" y="6" width="30" height="36" rx="2" fill="#e0e0e0" stroke="#999"/>
+          <text x="127" y="29" text-anchor="middle" font-size="18" fill="#666" font-family="serif">漢</text>
+          <text x="127" y="52" text-anchor="middle" font-size="7.5" fill="#ccc" font-family="sans-serif">100</text>
+
+          <rect x="148" y="2" width="58" height="44" rx="2" fill="#fff" stroke="#111" stroke-width="1.5"/>
+          <text x="177" y="30" text-anchor="middle" font-size="24" fill="#111" font-family="serif">漢</text>
+          <text x="177" y="57" text-anchor="middle" font-size="7.5" fill="#ccc" font-family="sans-serif">160</text>
+
+          <text x="105" y="66" text-anchor="middle" font-size="7" fill="#ddd" font-family="sans-serif">ステップ数 →</text>
+        </svg>
+      </div>
+      <div class="tech-card-title">2〜160 ステップ 段階品質</div>
+      <div class="tech-card-desc">ステップ数で品質を制御。2 では荒い輪郭、160 で鮮明な漢字が出現する。中点へのノイズ注入が混沌からの出現を可視化する。</div>
+    </div>
+
+    <!-- 4. 3-Screen Projection -->
+    <div class="tech-card">
+      <div class="tech-diagram">
+        <svg viewBox="0 0 210 78" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- 俯瞰図: 3スクリーン -->
+          <!-- 左スクリーン -->
+          <rect x="8" y="18" width="8" height="42" rx="1" fill="#e0e0e0" stroke="#aaa" stroke-width="1.2"/>
+          <text x="12" y="70" text-anchor="middle" font-size="6.5" fill="#aaa" font-family="sans-serif">左</text>
+          <!-- 中央スクリーン -->
+          <rect x="83" y="6" width="44" height="8" rx="1" fill="#111" stroke="#111"/>
+          <text x="105" y="22" text-anchor="middle" font-size="6.5" fill="#888" font-family="sans-serif">中央</text>
+          <!-- 右スクリーン -->
+          <rect x="194" y="18" width="8" height="42" rx="1" fill="#e0e0e0" stroke="#aaa" stroke-width="1.2"/>
+          <text x="198" y="70" text-anchor="middle" font-size="6.5" fill="#aaa" font-family="sans-serif">右</text>
+          <!-- プロジェクター -->
+          <circle cx="105" cy="56" r="7" fill="#111"/>
+          <text x="105" y="59" text-anchor="middle" font-size="5.5" fill="#fff" font-family="sans-serif">P</text>
+          <!-- 投影ライン -->
+          <line x1="100" y1="51" x2="20" y2="38" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="4,3"/>
+          <line x1="105" y1="49" x2="105" y2="16" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="4,3"/>
+          <line x1="110" y1="51" x2="190" y2="38" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="4,3"/>
+          <!-- 観者 -->
+          <circle cx="105" cy="73" r="4" fill="#ccc"/>
+          <text x="120" y="76" font-size="6.5" fill="#bbb" font-family="sans-serif">観者</text>
+        </svg>
+      </div>
+      <div class="tech-card-title">3 スクリーン投影</div>
+      <div class="tech-card-desc">左・中央・右の 3 面に記号の流れを同時投影するインスタレーション。観者は変容する記号の場に包まれ、意味なき形象の連鎖を体感する。</div>
+    </div>
+
+    <!-- 5. PyTorch / Apple MPS -->
+    <div class="tech-card">
+      <div class="tech-diagram">
+        <svg viewBox="0 0 210 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="40" y="8" width="130" height="16" rx="2" fill="#f4f4f4" stroke="#e0e0e0"/>
+          <text x="105" y="20" text-anchor="middle" font-size="8.5" fill="#999" font-family="sans-serif">Python 3</text>
+          <rect x="40" y="29" width="130" height="16" rx="2" fill="#ebebeb" stroke="#d0d0d0"/>
+          <text x="105" y="41" text-anchor="middle" font-size="8.5" fill="#666" font-family="sans-serif">PyTorch</text>
+          <rect x="40" y="50" width="130" height="16" rx="2" fill="#111" stroke="#111"/>
+          <text x="105" y="62" text-anchor="middle" font-size="8.5" fill="#fff" font-family="sans-serif">Apple MPS (GPU)</text>
+        </svg>
+      </div>
+      <div class="tech-card-title">PyTorch / Apple MPS</div>
+      <div class="tech-card-desc">Apple Silicon の GPU を MPS バックエンド経由で活用。クラウド不要、Mac のローカル環境でリアルタイム推論と生成を完結させる。</div>
+    </div>
+
+    <!-- 6. Progressive Rendering -->
+    <div class="tech-card">
+      <div class="tech-diagram">
+        <svg viewBox="0 0 210 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs><marker id="a2" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L6,3 Z" fill="#ddd"/></marker></defs>
+          <!-- 時間軸 -->
+          <line x1="8" y1="62" x2="200" y2="62" stroke="#e8e8e8" stroke-width="1" marker-end="url(#a2)"/>
+          <text x="195" y="72" text-anchor="middle" font-size="6.5" fill="#ccc" font-family="sans-serif">時間</text>
+          <!-- フレーム群 -->
+          <rect x="10" y="18" width="26" height="38" rx="2" fill="#f5f5f5" stroke="#e8e8e8"/>
+          <text x="23" y="40" text-anchor="middle" font-size="14" fill="#e8e8e8" font-family="serif">漢</text>
+          <text x="23" y="58" text-anchor="middle" font-size="6" fill="#ccc" font-family="sans-serif">2</text>
+
+          <rect x="44" y="18" width="26" height="38" rx="2" fill="#f0f0f0" stroke="#d8d8d8"/>
+          <text x="57" y="40" text-anchor="middle" font-size="14" fill="#d0d0d0" font-family="serif">漢</text>
+
+          <rect x="78" y="18" width="26" height="38" rx="2" fill="#e8e8e8" stroke="#bbb"/>
+          <text x="91" y="40" text-anchor="middle" font-size="14" fill="#aaa" font-family="serif">漢</text>
+
+          <rect x="112" y="18" width="26" height="38" rx="2" fill="#e0e0e0" stroke="#999"/>
+          <text x="125" y="40" text-anchor="middle" font-size="14" fill="#666" font-family="serif">漢</text>
+
+          <rect x="146" y="14" width="52" height="42" rx="2" fill="#fff" stroke="#111" stroke-width="1.5"/>
+          <text x="172" y="40" text-anchor="middle" font-size="20" fill="#111" font-family="serif">漢</text>
+          <text x="172" y="58" text-anchor="middle" font-size="6" fill="#ccc" font-family="sans-serif">160</text>
+        </svg>
+      </div>
+      <div class="tech-card-title">プログレッシブレンダリング</div>
+      <div class="tech-card-desc">各フレームをステップ 2 から描画し、フレームごとに品質を段階的に上げる。荒い輪郭から鮮明な形象への遷移自体が映像表現となる。</div>
+    </div>
+
   </div>
 </section>
 
 <section class="cp-gallery">
-  <div class="section-label">Images</div>
+  <div class="section-label">画像</div>
   <div class="gallery-grid" id="gallery">
     <!-- images go here -->
   </div>

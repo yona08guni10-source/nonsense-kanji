@@ -6,9 +6,56 @@
 <title>Manual Dopamine — Ando Takahiro</title>
 <link rel="stylesheet" href="../style.css?v=6">
 <style>
-.desc-section { display: block; }
-.desc-label { margin-bottom: 24px; }
-.desc-body { text-align: center; max-width: 680px; margin: 0 auto; }
+.md-hero {
+  padding: 60px 40px 56px;
+  border-bottom: 1px solid var(--border);
+  text-align: center;
+}
+.md-title {
+  font-size: clamp(36px, 6vw, 72px);
+  font-weight: 200;
+  letter-spacing: .1em;
+  line-height: 1.1;
+  margin-bottom: 20px;
+}
+.md-subtitle {
+  font-size: 13px;
+  letter-spacing: .2em;
+  color: var(--muted);
+}
+.md-video {
+  padding: 64px 40px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.md-video .section-label { align-self: center; margin-bottom: 32px; }
+.md-video .video-wrap { max-width: 860px; width: 100%; }
+.md-desc {
+  padding: 64px 40px 72px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.md-desc .section-label { margin-bottom: 32px; }
+.md-desc-body {
+  max-width: 640px;
+  font-size: 13px;
+  line-height: 2.4;
+  color: #444;
+  text-align: center;
+}
+.md-desc-body p + p { margin-top: 1.4em; }
+.md-gallery {
+  padding: 64px 40px 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.md-gallery .section-label { margin-bottom: 32px; }
+.md-gallery .gallery-grid { width: 100%; max-width: 960px; }
 </style>
 </head>
 <body class="has-nav">
@@ -17,16 +64,12 @@
   <a class="nav-back" href="../index.html">← Back</a>
 </nav>
 
-<section class="page-hero">
-  <div>
-    <div class="page-num">Project</div>
-    <h1 class="page-title">Manual<br>Dopamine</h1>
-    <div class="page-en">Media Art</div>
-  </div>
-  <p class="page-desc-short">ドーパミン中毒の可視化・身体化</p>
+<section class="md-hero">
+  <h1 class="md-title">Manual Dopamine</h1>
+  <p class="md-subtitle">- ドーパミン中毒の可視化・身体化 -</p>
 </section>
 
-<section class="video-section">
+<section class="md-video">
   <div class="section-label">Demo Video</div>
   <div class="video-wrap">
     <video autoplay muted loop playsinline controls>
@@ -35,9 +78,9 @@
   </div>
 </section>
 
-<section class="desc-section">
-  <div class="desc-label">Description</div>
-  <div class="desc-body">
+<section class="md-desc">
+  <div class="section-label">Description</div>
+  <div class="md-desc-body">
     <p>現代社会において、TikTok や YouTube Shorts に代表される縦型ショート動画プラットフォームは、我々の情報摂取のスタイルを劇的に変容させた。スマートフォンの画面を指先一つでスワイプするだけで、ユーザーの嗜好に最適化されたコンテンツが次々と供給される体験は、かつてない利便性と快楽をもたらしている。</p>
     <p>しかしこの摩擦の極めて少ないインターフェースと、高度に洗練されたレコメンドアルゴリズムの結合は、ユーザーから情報の選択権を静かに奪いつつある。次々と現れる動画への期待感は、脳内の報酬系を刺激し、気づけば数時間を浪費してしまうというドーパミン中毒とも呼べる依存状態を引き起こしている。私たちはテクノロジーを道具として使用しているつもりで、実のところシステムによって時間を消費させられているのではないか。この主客の逆転は、現代人が直面している看過できない課題である。</p>
     <p>この依存構造を助長している最大の要因は、操作に伴う身体的コストの欠如にあると本研究は考える。スワイプという動作は肉体的な負荷がほぼゼロであるため、脳が情報の過剰摂取によって疲弊していても、身体はその警告（疲れ）を発することができない。身体的な限界というブレーキを失った状態では、無限に続くアルゴリズムのループから自律的に脱出することは極めて困難である。テクノロジーの進化がインターフェースから物理的な重みを取り除いてきた結果、人間は自らの行動を制御するための重要な身体感覚を喪失してしまったと言える。</p>
@@ -45,7 +88,7 @@
   </div>
 </section>
 
-<section class="gallery-section">
+<section class="md-gallery">
   <div class="section-label">Images</div>
   <div class="gallery-grid" id="gallery">
     <!-- images go here -->

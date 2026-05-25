@@ -4,7 +4,26 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kanji Morphing — Nonsense Kanji</title>
-<link rel="stylesheet" href="../style.css?v=4">
+<link rel="stylesheet" href="../style.css?v=6">
+<style>
+.cp-hero { padding: 60px 40px 56px; border-bottom: 1px solid var(--border); text-align: center; }
+.cp-title { font-size: clamp(36px, 6vw, 72px); font-weight: 200; letter-spacing: .1em; line-height: 1.1; margin-bottom: 16px; }
+.cp-subtitle { font-size: 13px; letter-spacing: .2em; color: var(--muted); }
+.cp-video { padding: 64px 40px; border-bottom: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; }
+.cp-video .section-label { margin-bottom: 32px; }
+.cp-video .video-wrap { max-width: 860px; width: 100%; }
+.cp-desc { padding: 64px 40px; border-bottom: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; }
+.cp-desc .section-label { margin-bottom: 32px; }
+.cp-desc-body { max-width: 640px; font-size: 13px; line-height: 2.4; color: #444; text-align: center; }
+.cp-desc-body p + p { margin-top: 1.4em; }
+.cp-tech { padding: 48px 40px; border-bottom: 1px solid var(--border); background: var(--white); display: flex; flex-direction: column; align-items: center; }
+.cp-tech .section-label { margin-bottom: 24px; }
+.cp-tech-list { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; max-width: 720px; }
+.cp-tech-list .tech-item { font-size: 10px; letter-spacing: .2em; color: var(--muted); padding: 10px 16px; border: 1px solid var(--border); }
+.cp-gallery { padding: 64px 40px 80px; display: flex; flex-direction: column; align-items: center; }
+.cp-gallery .section-label { margin-bottom: 32px; }
+.cp-gallery .gallery-grid { width: 100%; max-width: 960px; }
+</style>
 </head>
 <body class="has-nav">
 <nav>
@@ -12,16 +31,12 @@
   <a class="nav-back" href="index.html">← Nonsense Kanji</a>
 </nav>
 
-<section class="page-hero">
-  <div>
-    <div class="page-num">01 — Generation</div>
-    <h1 class="page-title">Kanji<br>Morphing</h1>
-    <div class="page-en">漢字モーフィング</div>
-  </div>
-  <p class="page-desc-short">A flow-matching diffusion model interpolates between kanji forms, transforming shape continuously without regard for meaning.</p>
+<section class="cp-hero">
+  <h1 class="cp-title">Kanji Morphing</h1>
+  <p class="cp-subtitle">- 漢字モーフィング -</p>
 </section>
 
-<section class="video-section">
+<section class="cp-video">
   <div class="section-label">Demo Video</div>
   <div class="video-wrap">
     <video autoplay muted loop playsinline controls>
@@ -30,18 +45,18 @@
   </div>
 </section>
 
-<section class="desc-section">
-  <div class="desc-label">Description</div>
-  <div class="desc-body">
+<section class="cp-desc">
+  <div class="section-label">Description</div>
+  <div class="cp-desc-body">
     <p>Input text is decomposed into individual kanji characters. Adjacent pairs are morphed using a flow-matching diffusion model and played as a continuous loop.</p>
     <p>Noise is intentionally injected at segment midpoints, making visible the process by which the model extracts kanji forms from chaos. At 2 steps, forms are turbulent and ambiguous; at 160 steps, sharp black-and-white characters emerge.</p>
     <p>In the three-screen projection installation, sequential symbol flows are projected onto left, center, and right walls — immersing the viewer in a field of transforming signs.</p>
   </div>
 </section>
 
-<section class="tech-section">
+<section class="cp-tech">
   <div class="section-label">Technical Notes</div>
-  <div class="tech-list">
+  <div class="cp-tech-list">
     <div class="tech-item">Flow Matching Diffusion</div>
     <div class="tech-item">SymbolUNet (64×64)</div>
     <div class="tech-item">2–160 Step Progressive Quality</div>
@@ -51,7 +66,7 @@
   </div>
 </section>
 
-<section class="gallery-section">
+<section class="cp-gallery">
   <div class="section-label">Images</div>
   <div class="gallery-grid" id="gallery">
     <!-- images go here -->

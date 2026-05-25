@@ -113,15 +113,10 @@ nav {
 @media (max-width: 640px) { .gallery-grid { columns: 2; } }
 
 /* MABU ページ */
-.mabu-header {
-  padding: 48px 60px 60px;
+.mabu-top {
+  padding: 40px 60px 32px;
   border-bottom: 1px solid var(--border);
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-  gap: 60px;
-  align-items: start;
 }
-@media (max-width: 768px) { .mabu-header { grid-template-columns: 1fr; } }
 .mabu-title {
   font-size: clamp(40px, 6vw, 72px);
   font-weight: 200;
@@ -133,21 +128,32 @@ nav {
   letter-spacing: .35em;
   color: var(--muted);
   text-transform: uppercase;
-  margin-top: 12px;
+  margin-top: 10px;
 }
+.mabu-text-section {
+  padding: 72px 60px 80px;
+  border-top: 1px solid var(--border);
+}
+.mabu-text-inner {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 60px;
+}
+@media (max-width: 768px) { .mabu-text-inner { grid-template-columns: 1fr; } }
 .mabu-lead {
   font-family: 'Hiragino Mincho ProN', 'Yu Mincho', 'YuMincho', 'Noto Serif JP', serif;
-  font-size: clamp(20px, 2.5vw, 28px);
+  font-size: clamp(18px, 2vw, 24px);
   font-weight: 600;
   color: var(--fg);
   letter-spacing: .04em;
-  line-height: 1.4;
-  margin-bottom: 20px;
+  line-height: 1.5;
+  position: sticky;
+  top: 80px;
 }
 .mabu-body {
   font-family: 'Hiragino Mincho ProN', 'Yu Mincho', 'YuMincho', 'Noto Serif JP', serif;
   font-size: 13px;
-  line-height: 2;
+  line-height: 2.2;
   color: var(--fg);
   margin-bottom: 20px;
 }

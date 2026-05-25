@@ -9,6 +9,9 @@
 .cp-hero { padding: 60px 40px 56px; border-bottom: 1px solid var(--border); text-align: center; }
 .cp-title { font-size: clamp(36px, 6vw, 72px); font-weight: 200; letter-spacing: .1em; line-height: 1.1; margin-bottom: 16px; }
 .cp-subtitle { font-size: 13px; letter-spacing: .2em; color: var(--muted); }
+.cp-video { padding: 64px 40px; border-bottom: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; }
+.cp-video .section-label { margin-bottom: 32px; }
+.cp-video .video-wrap { max-width: 860px; width: 100%; }
 .cp-gallery { padding: 64px 40px 80px; display: flex; flex-direction: column; align-items: center; }
 .cp-gallery .section-label { margin-bottom: 32px; }
 .cp-gallery .gallery-grid { width: 100%; max-width: 960px; }
@@ -25,10 +28,19 @@
   <p class="cp-subtitle">- 漢字樹形図 -</p>
 </section>
 
+<section class="cp-video">
+  <div class="section-label">Demo Video</div>
+  <div class="video-wrap">
+    <video autoplay muted loop playsinline controls>
+      <source src="../assets/videos/nonsense-kanji/nk_tree_play1.mp4" type="video/mp4">
+    </video>
+  </div>
+</section>
+
 <section class="cp-gallery">
   <div class="section-label">Images</div>
-  <div class="gallery-grid" id="gallery">
-    <!-- images go here -->
+  <div class="gallery-grid">
+    <img src="../assets/images/nonsense-kanji/nk_tree_samune.png" alt="Kanji Tree">
   </div>
 </section>
 

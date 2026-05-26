@@ -270,38 +270,67 @@
 </section>
 
 <section class="cp-tech">
-  <div class="section-label">技術解説</div>
+  <div class="section-label">設計</div>
   <div class="cp-tech-grid">
 
-    <!-- 1. Flow Matching Diffusion -->
+    <!-- 0. データセット構築 -->
+    <div class="tech-card">
+      <div class="tech-diagram">
+        <svg viewBox="0 0 210 68" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs><marker id="a0" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L6,3 Z" fill="#ccc"/></marker></defs>
+          <!-- Font -->
+          <rect x="2" y="10" width="52" height="40" rx="2" fill="#f8f8f8" stroke="#ddd"/>
+          <text x="28" y="28" text-anchor="middle" font-size="7" fill="#aaa" font-family="sans-serif">Noto Sans</text>
+          <text x="28" y="38" text-anchor="middle" font-size="7" fill="#aaa" font-family="sans-serif">CJK JP</text>
+          <text x="28" y="48" text-anchor="middle" font-size="7" fill="#ccc" font-family="sans-serif">.otf</text>
+          <!-- 矢印 -->
+          <line x1="56" y1="30" x2="76" y2="30" stroke="#ddd" stroke-width="1" marker-end="url(#a0)"/>
+          <text x="66" y="24" text-anchor="middle" font-size="6" fill="#ccc" font-family="sans-serif">Pillow</text>
+          <text x="66" y="44" text-anchor="middle" font-size="6" fill="#ccc" font-family="sans-serif">FreeType</text>
+          <!-- PNG グリッド -->
+          <rect x="80" y="6" width="124" height="54" rx="2" fill="#f4f4f4" stroke="#e8e8e8"/>
+          <rect x="88" y="14" width="16" height="16" rx="1" fill="#fff" stroke="#ddd"/>
+          <text x="96" y="26" text-anchor="middle" font-size="10" fill="#bbb" font-family="serif">漢</text>
+          <rect x="110" y="14" width="16" height="16" rx="1" fill="#fff" stroke="#ddd"/>
+          <text x="118" y="26" text-anchor="middle" font-size="10" fill="#bbb" font-family="serif">字</text>
+          <rect x="132" y="14" width="16" height="16" rx="1" fill="#fff" stroke="#ddd"/>
+          <text x="140" y="26" text-anchor="middle" font-size="10" fill="#bbb" font-family="serif">記</text>
+          <rect x="154" y="14" width="16" height="16" rx="1" fill="#fff" stroke="#ddd"/>
+          <text x="162" y="26" text-anchor="middle" font-size="10" fill="#bbb" font-family="serif">号</text>
+          <rect x="176" y="14" width="16" height="16" rx="1" fill="#fff" stroke="#ddd"/>
+          <text x="184" y="26" text-anchor="middle" font-size="10" fill="#ccc" font-family="serif">…</text>
+          <text x="142" y="46" text-anchor="middle" font-size="7" fill="#bbb" font-family="sans-serif">20,992 文字 · 64×64 px · グレースケール</text>
+          <text x="142" y="56" text-anchor="middle" font-size="6.5" fill="#ccc" font-family="sans-serif">U+4E00 〜 U+9FFF（CJK 統合漢字）</text>
+        </svg>
+      </div>
+      <div class="tech-card-title">データセット構築</div>
+      <div class="tech-card-desc">Google Noto Sans CJK JP フォントを素材とした。Python の Pillow（FreeType）で CJK 統合漢字ブロックの全コードポイントを走査し、各グリフをキャンバスに描画。バウンディングボックスで中央配置して 64×64 px のグレースケール PNG に変換した。グリフが存在しないコードポイントは自動的に除外され、最終的に 20,992 文字のデータセットを構築した。漢字を意味や読みとしてではなく、純粋な画像パターンとして扱うことが設計の出発点だった。</div>
+    </div>
+
+    <!-- 1. Flow Matching -->
     <div class="tech-card">
       <div class="tech-diagram">
         <svg viewBox="0 0 210 68" fill="none" xmlns="http://www.w3.org/2000/svg">
           <defs><marker id="a1" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L6,3 Z" fill="#ccc"/></marker></defs>
-          <!-- ノイズボックス -->
           <rect x="4" y="4" width="42" height="42" rx="2" fill="#f4f4f4" stroke="#ddd"/>
           <circle cx="14" cy="14" r="1.5" fill="#ccc"/><circle cx="24" cy="10" r="1.5" fill="#bbb"/>
           <circle cx="34" cy="17" r="1.5" fill="#ccc"/><circle cx="18" cy="26" r="1.5" fill="#bbb"/>
           <circle cx="38" cy="24" r="1.5" fill="#ccc"/><circle cx="28" cy="34" r="1.5" fill="#bbb"/>
           <circle cx="12" cy="38" r="1.5" fill="#ccc"/><circle cx="40" cy="38" r="1.5" fill="#bbb"/>
           <text x="25" y="57" text-anchor="middle" font-size="8" fill="#bbb" font-family="sans-serif">ノイズ</text>
-          <!-- 矢印1 -->
           <line x1="48" y1="25" x2="72" y2="25" stroke="#ccc" stroke-width="1.2" marker-end="url(#a1)"/>
           <text x="60" y="20" text-anchor="middle" font-size="7" fill="#ccc" font-family="sans-serif">v_θ(z,t)</text>
-          <!-- 中間ボックス -->
           <rect x="76" y="4" width="42" height="42" rx="2" fill="#f9f9f9" stroke="#e0e0e0"/>
           <text x="97" y="30" text-anchor="middle" font-size="22" fill="#ddd" font-family="serif">漢</text>
           <text x="97" y="57" text-anchor="middle" font-size="8" fill="#bbb" font-family="sans-serif">t = 0.5</text>
-          <!-- 矢印2 -->
           <line x1="120" y1="25" x2="144" y2="25" stroke="#ccc" stroke-width="1.2" marker-end="url(#a1)"/>
-          <!-- 漢字ボックス -->
           <rect x="148" y="4" width="58" height="42" rx="2" fill="#fff" stroke="#111" stroke-width="1.5"/>
           <text x="177" y="32" text-anchor="middle" font-size="26" fill="#111" font-family="serif">漢</text>
           <text x="177" y="57" text-anchor="middle" font-size="8" fill="#bbb" font-family="sans-serif">漢字</text>
         </svg>
       </div>
-      <div class="tech-card-title">フローマッチング拡散</div>
-      <div class="tech-card-desc">速度場 v_θ(z,t) を学習し、ガウスノイズから漢字形状への連続変換を実現。ODE 積分で任意の中間状態を補間できる。</div>
+      <div class="tech-card-title">Flow Matching による学習</div>
+      <div class="tech-card-desc">ガウスノイズから漢字へ向かう直線経路を学習目標として定義する。訓練時は z_t = t×漢字 + (1−t)×ノイズ という補間点を生成し、モデルは正解速度 v = 漢字 − ノイズ を予測するよう学習する。損失は予測と正解の二乗誤差のみ。構造がシンプルなため収束が安定しており、1000 エポック・loss 0.107 まで学習した。</div>
     </div>
 
     <!-- 2. SymbolUNet -->
@@ -309,7 +338,6 @@
       <div class="tech-diagram">
         <svg viewBox="0 0 210 82" fill="none" xmlns="http://www.w3.org/2000/svg">
           <text x="32" y="9" text-anchor="middle" font-size="7" fill="#aaa" font-family="sans-serif">入力 64×64</text>
-          <!-- エンコーダ -->
           <rect x="6" y="13" width="52" height="13" rx="2" fill="#ebebeb" stroke="#ccc"/>
           <text x="32" y="23" text-anchor="middle" font-size="6.5" fill="#888" font-family="sans-serif">Conv × 2</text>
           <line x1="32" y1="27" x2="32" y2="33" stroke="#ccc" stroke-width="1"/>
@@ -318,16 +346,12 @@
           <text x="32" y="49" text-anchor="middle" font-size="6.5" fill="#888" font-family="sans-serif">Conv × 2</text>
           <line x1="32" y1="52" x2="32" y2="58" stroke="#ccc" stroke-width="1"/>
           <polygon points="28,58 32,62 36,58" fill="#ddd"/>
-          <!-- ボトルネック -->
           <rect x="80" y="64" width="50" height="12" rx="2" fill="#111" stroke="#111"/>
           <text x="105" y="73" text-anchor="middle" font-size="6.5" fill="#fff" font-family="sans-serif">Bottleneck</text>
-          <!-- スキップ接続 -->
           <line x1="58" y1="19.5" x2="152" y2="19.5" stroke="#e8e8e8" stroke-width="1" stroke-dasharray="3,2"/>
           <line x1="48" y1="45.5" x2="162" y2="45.5" stroke="#e8e8e8" stroke-width="1" stroke-dasharray="3,2"/>
-          <!-- BNへの接続 -->
           <path d="M32 62 C32 70 55 70 80 70" stroke="#ccc" stroke-width="1" fill="none"/>
           <path d="M130 70 C155 70 178 70 178 62" stroke="#ccc" stroke-width="1" fill="none"/>
-          <!-- デコーダ -->
           <rect x="162" y="40" width="32" height="11" rx="2" fill="#ddd" stroke="#bbb"/>
           <text x="178" y="49" text-anchor="middle" font-size="6.5" fill="#888" font-family="sans-serif">Up+Conv</text>
           <line x1="178" y1="39" x2="178" y2="28" stroke="#ccc" stroke-width="1"/>
@@ -337,70 +361,57 @@
           <text x="178" y="9" text-anchor="middle" font-size="7" fill="#aaa" font-family="sans-serif">出力 64×64</text>
         </svg>
       </div>
-      <div class="tech-card-title">SymbolUNet (64×64)</div>
-      <div class="tech-card-desc">エンコーダとデコーダをスキップ接続でつなぐ U 字型 CNN。64×64 の漢字画像ノイズ除去に特化した軽量設計。</div>
+      <div class="tech-card-title">SymbolUNet — モデル設計</div>
+      <div class="tech-card-desc">速度場を推定するネットワークとして U-Net を採用した。エンコーダで空間を圧縮しながら特徴を抽出、ボトルネックで Self-Attention により全体構造を把握、デコーダでスキップ接続を通じて細部を復元する。時刻 t は正弦波埋め込みで数値化し、各 ResBlock に注入することで「今どの段階の形を予測すべきか」をモデルに伝える。base_ch=48 の軽量設計でローカル実行に最適化した。</div>
     </div>
 
-    <!-- 3. 2-160 Step -->
+    <!-- 3. ODE 積分とステップ数 -->
     <div class="tech-card">
       <div class="tech-diagram">
         <svg viewBox="0 0 210 68" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <!-- 5段階のボックス -->
           <rect x="4" y="6" width="30" height="36" rx="2" fill="#f5f5f5" stroke="#e8e8e8"/>
           <text x="19" y="29" text-anchor="middle" font-size="18" fill="#e8e8e8" font-family="serif">漢</text>
           <text x="19" y="52" text-anchor="middle" font-size="7.5" fill="#ccc" font-family="sans-serif">2</text>
-
           <rect x="40" y="6" width="30" height="36" rx="2" fill="#f0f0f0" stroke="#d8d8d8"/>
           <text x="55" y="29" text-anchor="middle" font-size="18" fill="#d0d0d0" font-family="serif">漢</text>
           <text x="55" y="52" text-anchor="middle" font-size="7.5" fill="#ccc" font-family="sans-serif">20</text>
-
           <rect x="76" y="6" width="30" height="36" rx="2" fill="#e8e8e8" stroke="#bbb"/>
           <text x="91" y="29" text-anchor="middle" font-size="18" fill="#aaa" font-family="serif">漢</text>
           <text x="91" y="52" text-anchor="middle" font-size="7.5" fill="#ccc" font-family="sans-serif">60</text>
-
           <rect x="112" y="6" width="30" height="36" rx="2" fill="#e0e0e0" stroke="#999"/>
           <text x="127" y="29" text-anchor="middle" font-size="18" fill="#666" font-family="serif">漢</text>
           <text x="127" y="52" text-anchor="middle" font-size="7.5" fill="#ccc" font-family="sans-serif">100</text>
-
           <rect x="148" y="2" width="58" height="44" rx="2" fill="#fff" stroke="#111" stroke-width="1.5"/>
           <text x="177" y="30" text-anchor="middle" font-size="24" fill="#111" font-family="serif">漢</text>
           <text x="177" y="57" text-anchor="middle" font-size="7.5" fill="#ccc" font-family="sans-serif">160</text>
-
           <text x="105" y="66" text-anchor="middle" font-size="7" fill="#ddd" font-family="sans-serif">ステップ数 →</text>
         </svg>
       </div>
-      <div class="tech-card-title">2〜160 ステップ 段階品質</div>
-      <div class="tech-card-desc">ステップ数で品質を制御。2 では荒い輪郭、160 で鮮明な漢字が出現する。中点へのノイズ注入が混沌からの出現を可視化する。</div>
+      <div class="tech-card-title">ODE 積分と推論ステップ数</div>
+      <div class="tech-card-desc">生成時はノイズを出発点に z_{t+dt} = z_t + v_θ(z_t, t)·dt を繰り返して漢字へ近づける。ステップ数が少ないと積分が粗く、形が漢字空間に到達しきれない。2 ステップでは輪郭だけ、80 ステップで十分に収束する。この「形が立ち上がる過程」がステップ数という一つのパラメータで可視化されることが、表現として重要な発見だった。</div>
     </div>
 
     <!-- 4. 3-Screen Projection -->
     <div class="tech-card">
       <div class="tech-diagram">
         <svg viewBox="0 0 210 78" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <!-- 俯瞰図: 3スクリーン -->
-          <!-- 左スクリーン -->
           <rect x="8" y="18" width="8" height="42" rx="1" fill="#e0e0e0" stroke="#aaa" stroke-width="1.2"/>
           <text x="12" y="70" text-anchor="middle" font-size="6.5" fill="#aaa" font-family="sans-serif">左</text>
-          <!-- 中央スクリーン -->
           <rect x="83" y="6" width="44" height="8" rx="1" fill="#111" stroke="#111"/>
           <text x="105" y="22" text-anchor="middle" font-size="6.5" fill="#888" font-family="sans-serif">中央</text>
-          <!-- 右スクリーン -->
           <rect x="194" y="18" width="8" height="42" rx="1" fill="#e0e0e0" stroke="#aaa" stroke-width="1.2"/>
           <text x="198" y="70" text-anchor="middle" font-size="6.5" fill="#aaa" font-family="sans-serif">右</text>
-          <!-- プロジェクター -->
           <circle cx="105" cy="56" r="7" fill="#111"/>
           <text x="105" y="59" text-anchor="middle" font-size="5.5" fill="#fff" font-family="sans-serif">P</text>
-          <!-- 投影ライン -->
           <line x1="100" y1="51" x2="20" y2="38" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="4,3"/>
           <line x1="105" y1="49" x2="105" y2="16" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="4,3"/>
           <line x1="110" y1="51" x2="190" y2="38" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="4,3"/>
-          <!-- 観者 -->
           <circle cx="105" cy="73" r="4" fill="#ccc"/>
           <text x="120" y="76" font-size="6.5" fill="#bbb" font-family="sans-serif">観者</text>
         </svg>
       </div>
-      <div class="tech-card-title">3 スクリーン投影</div>
-      <div class="tech-card-desc">左・中央・右の 3 面に記号の流れを同時投影するインスタレーション。観者は変容する記号の場に包まれ、意味なき形象の連鎖を体感する。</div>
+      <div class="tech-card-title">3 スクリーン投影インスタレーション</div>
+      <div class="tech-card-desc">左・中央・右の 3 面に記号の流れを同時投影する展示形式を構想している。観者は正面だけでなく周辺視野にも変容する記号を受け取り、「記号の場」に包まれる状態を体験する。1 台のプロジェクターから 3 出力に分配するか、3 台を独立して走らせる構成を想定している。</div>
     </div>
 
     <!-- 5. PyTorch / Apple MPS -->
@@ -415,8 +426,8 @@
           <text x="105" y="62" text-anchor="middle" font-size="8.5" fill="#fff" font-family="sans-serif">Apple MPS (GPU)</text>
         </svg>
       </div>
-      <div class="tech-card-title">PyTorch / Apple MPS</div>
-      <div class="tech-card-desc">Apple Silicon の GPU を MPS バックエンド経由で活用。クラウド不要、Mac のローカル環境でリアルタイム推論と生成を完結させる。</div>
+      <div class="tech-card-title">実行環境 — ローカル完結</div>
+      <div class="tech-card-desc">PyTorch の Apple MPS バックエンドを使い、Apple Silicon の GPU でローカル学習・推論を完結させた。クラウドサービスは一切使用していない。学習は 1000 エポック、モーフィング生成は 80 ステップで 1 フレームあたり数百ミリ秒で動作する。ローカルで動かすことは、AIを自分の手の届く道具として扱うという制作姿勢でもある。</div>
     </div>
 
     <!-- 6. Progressive Rendering -->
@@ -424,30 +435,24 @@
       <div class="tech-diagram">
         <svg viewBox="0 0 210 72" fill="none" xmlns="http://www.w3.org/2000/svg">
           <defs><marker id="a2" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L6,3 Z" fill="#ddd"/></marker></defs>
-          <!-- 時間軸 -->
           <line x1="8" y1="62" x2="200" y2="62" stroke="#e8e8e8" stroke-width="1" marker-end="url(#a2)"/>
           <text x="195" y="72" text-anchor="middle" font-size="6.5" fill="#ccc" font-family="sans-serif">時間</text>
-          <!-- フレーム群 -->
           <rect x="10" y="18" width="26" height="38" rx="2" fill="#f5f5f5" stroke="#e8e8e8"/>
           <text x="23" y="40" text-anchor="middle" font-size="14" fill="#e8e8e8" font-family="serif">漢</text>
           <text x="23" y="58" text-anchor="middle" font-size="6" fill="#ccc" font-family="sans-serif">2</text>
-
           <rect x="44" y="18" width="26" height="38" rx="2" fill="#f0f0f0" stroke="#d8d8d8"/>
           <text x="57" y="40" text-anchor="middle" font-size="14" fill="#d0d0d0" font-family="serif">漢</text>
-
           <rect x="78" y="18" width="26" height="38" rx="2" fill="#e8e8e8" stroke="#bbb"/>
           <text x="91" y="40" text-anchor="middle" font-size="14" fill="#aaa" font-family="serif">漢</text>
-
           <rect x="112" y="18" width="26" height="38" rx="2" fill="#e0e0e0" stroke="#999"/>
           <text x="125" y="40" text-anchor="middle" font-size="14" fill="#666" font-family="serif">漢</text>
-
           <rect x="146" y="14" width="52" height="42" rx="2" fill="#fff" stroke="#111" stroke-width="1.5"/>
           <text x="172" y="40" text-anchor="middle" font-size="20" fill="#111" font-family="serif">漢</text>
           <text x="172" y="58" text-anchor="middle" font-size="6" fill="#ccc" font-family="sans-serif">160</text>
         </svg>
       </div>
       <div class="tech-card-title">プログレッシブレンダリング</div>
-      <div class="tech-card-desc">各フレームをステップ 2 から描画し、フレームごとに品質を段階的に上げる。荒い輪郭から鮮明な形象への遷移自体が映像表現となる。</div>
+      <div class="tech-card-desc">動画生成では各フレームをまず 2 ステップで粗く描画し、バックグラウンドでステップ数を増やしながら同じフレームを上書きしていく。荒い形から鮮明な形への遷移がリアルタイムで起きることで、混沌から記号が「出現する」過程そのものが映像になる。</div>
     </div>
 
   </div>
